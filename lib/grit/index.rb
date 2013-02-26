@@ -178,6 +178,7 @@ module Grit
 
       # overwrite with new tree contents
       tree.each do |k, v|
+        k = k.dup.force_encoding('binary') if k.respond_to?(:force_encoding)
         case v
           when Array
             sha, mode = v
@@ -200,7 +201,6 @@ module Grit
             str = "%s %s\0%s" % ['40000', k, sha]
             tree_contents[k + '/'] = str
           when false
-            k = k.dup.force_encoding('binary') if k.respond_to?(:force_encoding)
             tree_contents.delete(k)
         end
       end
