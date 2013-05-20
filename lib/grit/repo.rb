@@ -642,6 +642,24 @@ module Grit
       self.git.fs_delete(DAEMON_EXPORT_FILE)
     end
 
+    # Check whether the git-daemon-export-ok file exists in the repository. When
+    # the file exists, the repository is in public mode and available over git
+    # protocol.
+    #
+    # Returns true if the git-daemon-export-ok file exists.
+    def daemon_serve_enabled?
+      self.git.fs_exist?(DAEMON_EXPORT_FILE)
+    end
+    alias_method :public?, :daemon_serve_enabled?
+
+    # Check whether the repository is marked as public on disk. This checks for
+    # the non-existence of the git-daemon-export-ok file.
+    #
+    # Returns true if no git-daemon-export-ok file exists.
+    def private?
+      !public?
+    end
+
     def gc_auto
       self.git.gc({:auto => true})
     end
