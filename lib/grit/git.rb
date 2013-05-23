@@ -126,8 +126,9 @@ module Grit
     #
     # Returns nothing
     def fs_write(file, contents)
-      path = File.join(self.git_dir, file)
-      FileUtils.mkdir_p(File.dirname(path))
+      path = File.join(git_dir, file)
+      parent_dir = File.dirname(path)
+      FileUtils.mkdir_p(parent_dir) if git_dir != parent_dir && fs_exist?('.')
       File.open(path, 'wb') do |f|
         f.write(contents)
       end
