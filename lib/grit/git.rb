@@ -321,10 +321,6 @@ module Grit
       raise_errors = options.delete(:raise)
       process_info = options.delete(:process_info)
 
-      # fall back to using a shell when the last argument looks like it wants to
-      # start a pipeline for compatibility with previous versions of grit.
-      return run(prefix, cmd, '', options, args) if args[-1].to_s[0] == ?|
-
       # more options
       input    = options.delete(:input)
       timeout  = options.delete(:timeout); timeout = true if timeout.nil?
