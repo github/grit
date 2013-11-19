@@ -502,15 +502,15 @@ module Grit
     # Returns array of hashes - one per tree entry
     def lstree(treeish = 'master', options = {})
       # check recursive option
-      opts = {:timeout => false, :l => true, :t => true}
+      opts = {:timeout => false, :l => true, :t => true, :z => true}
       if options[:recursive]
         opts[:r] = true
       end
       # mode, type, sha, size, path
       revs = self.git.native(:ls_tree, opts, treeish)
-      lines = revs.split("\n")
+      lines = revs.split("\0")
       revs = lines.map do |a|
-        stuff, path = a.split("\t")
+        stuff, path = a.split("\t", 2)
         mode, type, sha, size = stuff.split(" ")
         entry = {:mode => mode, :type => type, :sha => sha, :path => path}
         entry[:size] = size.strip.to_i if size.strip != '-'
