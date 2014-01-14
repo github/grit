@@ -161,8 +161,8 @@ class TestCommit < Test::Unit::TestCase
 
   def test_diffs_with_options
     Git.any_instance.expects(:diff).
-      with({:full_index => true, :M => true}, 
-        '038af8c329ef7c1bae4568b98bd5c58510465493', 
+      with({:full_index => true, :M => true},
+        '038af8c329ef7c1bae4568b98bd5c58510465493',
         '91169e1f5fa4de2eaea3f176461f5dc784796769').
       returns(fixture('diff_mode_only'))
     @c = Commit.create(@r, :id => '91169e1f5fa4de2eaea3f176461f5dc784796769')
@@ -187,10 +187,9 @@ class TestCommit < Test::Unit::TestCase
     assert patch.include?('From: tom <tom@taco.(none)>')
     assert patch.include?('Date: Tue, 20 Nov 2007 17:27:42 -0800')
     assert patch.include?('Subject: [PATCH] fix tests on other machines')
-    assert patch.include?('test/test_reality.rb |   30 +++++++++++++++---------------')
+    assert patch.include?('test/test_reality.rb | 30 +++++++++++++++---------------')
     assert patch.include?('@@ -1,17 +1,17 @@')
     assert patch.include?('+#     recurse(t)')
-    assert patch.include?("1.7.")
   end
 
   # patch_id
