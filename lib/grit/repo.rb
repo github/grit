@@ -502,15 +502,15 @@ module Grit
     # Returns array of hashes - one per tree entry
     def lstree(treeish = 'master', options = {})
       # check recursive option
-      opts = {:timeout => false, :l => true, :t => true}
+      opts = {:timeout => false, :l => true, :t => true, :z => true}
       if options[:recursive]
         opts[:r] = true
       end
       # mode, type, sha, size, path
       revs = self.git.native(:ls_tree, opts, treeish)
-      lines = revs.split("\n")
+      lines = revs.split("\0")
       revs = lines.map do |a|
-        stuff, path = a.split("\t")
+        stuff, path = a.split("\t", 2)
         mode, type, sha, size = stuff.split(" ")
         entry = {:mode => mode, :type => type, :sha => sha, :path => path}
         entry[:size] = size.strip.to_i if size.strip != '-'
@@ -640,6 +640,24 @@ module Grit
     # Returns nothing
     def disable_daemon_serve
       self.git.fs_delete(DAEMON_EXPORT_FILE)
+    end
+
+    # Check whether the git-daemon-export-ok file exists in the repository. When
+    # the file exists, the repository is in public mode and available over git
+    # protocol.
+    #
+    # Returns true if the git-daemon-export-ok file exists.
+    def daemon_serve_enabled?
+      self.git.fs_exist?(DAEMON_EXPORT_FILE)
+    end
+    alias_method :public?, :daemon_serve_enabled?
+
+    # Check whether the repository is marked as public on disk. This checks for
+    # the non-existence of the git-daemon-export-ok file.
+    #
+    # Returns true if no git-daemon-export-ok file exists.
+    def private?
+      !public?
     end
 
     def gc_auto

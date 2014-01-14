@@ -178,6 +178,7 @@ module Grit
 
       # overwrite with new tree contents
       tree.each do |k, v|
+        k = k.dup.force_encoding('binary') if k.respond_to?(:force_encoding)
         case v
           when Array
             sha, mode = v

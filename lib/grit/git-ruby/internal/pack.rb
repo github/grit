@@ -15,6 +15,7 @@ require 'grit/git-ruby/internal/file_window'
 
 PACK_SIGNATURE = "PACK"
 PACK_IDX_SIGNATURE = "\377tOc"
+PACK_IDX_SIGNATURE.force_encoding('binary') if ''.respond_to?(:force_encoding)
 
 module Grit
   module GitRuby

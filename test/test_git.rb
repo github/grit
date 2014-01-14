@@ -102,7 +102,7 @@ class TestGit < Test::Unit::TestCase
     f = stub
     f.expects(:write).with('baz')
     FileUtils.expects(:mkdir_p).with(File.join(@git.git_dir, 'foo'))
-    File.expects(:open).with(File.join(@git.git_dir, 'foo/bar'), 'w').yields(f)
+    File.expects(:open).with(File.join(@git.git_dir, 'foo/bar'), 'wb').yields(f)
     @git.fs_write('foo/bar', 'baz')
   end
 

@@ -126,8 +126,9 @@ module Grit
     #
     # Returns nothing
     def fs_write(file, contents)
-      path = File.join(self.git_dir, file)
-      FileUtils.mkdir_p(File.dirname(path))
+      path = File.join(git_dir, file)
+      parent_dir = File.dirname(path)
+      FileUtils.mkdir_p(parent_dir) if git_dir != parent_dir && fs_exist?('.')
       File.open(path, 'wb') do |f|
         f.write(contents)
       end
@@ -319,10 +320,6 @@ module Grit
       env = options.delete(:env) || {}
       raise_errors = options.delete(:raise)
       process_info = options.delete(:process_info)
-
-      # fall back to using a shell when the last argument looks like it wants to
-      # start a pipeline for compatibility with previous versions of grit.
-      return run(prefix, cmd, '', options, args) if args[-1].to_s[0] == ?|
 
       # more options
       input    = options.delete(:input)
