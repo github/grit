@@ -2,7 +2,7 @@ require File.join(File.dirname(__FILE__), *%w[.. lib grit])
 
 require 'bundler/setup'
 require 'test/unit'
-require 'mocha'
+require 'mocha/setup'
 
 GRIT_REPO = ENV["GRIT_REPO"] || File.expand_path(File.join(File.dirname(__FILE__), '..'))
 
