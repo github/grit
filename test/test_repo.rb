@@ -298,7 +298,7 @@ class TestRepo < Test::Unit::TestCase
   def test_enable_daemon_serve
     f = stub
     f.expects("write").with('')
-    File.expects(:open).with(File.join(@r.path, 'git-daemon-export-ok'), 'w').yields(f)
+    File.expects(:open).with(File.join(@r.path, 'git-daemon-export-ok'), 'wb').yields(f)
     @r.enable_daemon_serve
   end
 
